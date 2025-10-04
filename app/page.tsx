@@ -1,4 +1,9 @@
 import Image from "next/image";
+import React from "react";
+import { dashboard } from "./dashboard/page";
+import { login } from "./login/page";
+import { New } from "./new/page";
+import { result } from "./result/[id]/page";
 
 export default function Home() {
   return (
