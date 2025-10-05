@@ -1,31 +1,52 @@
-import { useState } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from "../../lib/firebaseClient";
-import { useRouter } from "next/router";
+"use client";
 
+import { useEffect } from "react";
+import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { auth, provider } from "../../lib/firebaseClient";
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const signup = async () => {
-    await createUserWithEmailAndPassword(auth, email, password);
-    router.push("/dashboard");
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) router.push("/dashboard");
+    });
+    return () => unsub();
+  }, [router]);
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+      router.push("/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Login failed!");
+    }
   };
-  const signin = async () => {
-    await signInWithEmailAndPassword(auth, email, password);
-    router.push("/dashboard");
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    alert("Logged out!");
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h1 className="text-xl mb-4">Login / Sign up</h1>
-      <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="mb-2"/>
-      <input value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" type="password" className="mb-4"/>
-      <div className="flex gap-2">
-        <button onClick={signin} className="btn">Sign in</button>
-        <button onClick={signup} className="btn">Sign up</button>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-green-50">
+      <h1 className="text-3xl font-bold mb-6">🌾 AgriAid</h1>
+      <p className="mb-4 text-gray-600">Your AI-powered crop doctor</p>
+
+      <button
+        onClick={handleLogin}
+        className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition"
+      >
+        Sign in with Google
+      </button>
+
+      <button
+        onClick={handleLogout}
+        className="text-sm text-gray-500 mt-4 underline"
+      >
+        Logout (for testing)
+      </button>
     </div>
   );
 }
