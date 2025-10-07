@@ -7,7 +7,15 @@ import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 
 export default function HistoryPage() {
   const { user } = useAuth();
-  const [cases, setCases] = useState<any[]>([]);
+  interface Case {
+    id: string;
+    createdAt?: { toDate: () => Date };
+    symptomText: string;
+    status: string;
+    resultId: string;
+  }
+
+  const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +27,16 @@ export default function HistoryPage() {
         orderBy("createdAt", "desc")
       );
       const snap = await getDocs(q);
-      const items = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const items = snap.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          createdAt: data.createdAt,
+          symptomText: data.symptomText || "Unknown symptom",
+          status: data.status || "Unknown status",
+          resultId: data.resultId || "Unknown resultId",
+        };
+      });
       setCases(items);
       setLoading(false);
     };
