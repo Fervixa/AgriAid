@@ -1,41 +1,67 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { useAuth } from "@/context/Authcontext";
 import { useRouter } from "next/navigation";
-import { auth } from "../../lib/firebaseClient";
-export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
+import { useEffect } from "react";
+
+export default function DashboardPage() {
+  const { user, logout } = useAuth();
   const router = useRouter();
 
+  // 🟢 If not logged in, redirect to login
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
-      else router.push("/");
-    });
-    return () => unsub();
-  }, [router]);
+    if (user === null) {
+      router.push("/login");
+    }
+  }, [user, router]);
+
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-green-700 text-xl font-semibold">
+        Loading Dashboard...
+      </div>
+    );
+  }
+
+  // 🟢 Handle Logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/login");
+    } catch (err) {
+      console.error("Logout error:", err);
+      alert("Failed to logout. Please try again.");
+    }
+  };
 
   return (
-    <div className="p-6">
-      {user ? (
-        <>
-          <h1 className="text-2xl font-bold">Welcome, {user.displayName}</h1>
-          <p className="mt-2 text-gray-600">
-            You are logged in as {user.email}
-          </p>
-          <div className="mt-6">
-            <a
-              href="/test"
-              className="text-green-700 underline font-semibold hover:text-green-900"
-            >
-              ➜ Go to Test Page
-            </a>
-          </div>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-8">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg text-center">
+        <h1 className="text-3xl font-bold text-green-700 mb-4">
+          🌿 Welcome to Your Dashboard
+        </h1>
+
+        <p className="text-gray-600 mb-6">
+          Logged in as:{" "}
+          <span className="font-medium text-green-700">{user.email}</span>
+        </p>
+
+        <div className="flex flex-col gap-3">
+          <button
+            onClick={() => router.push("/new")}
+            className="bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition"
+          >
+            + Analyze New Crop
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

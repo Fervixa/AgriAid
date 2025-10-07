@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
 import { uploadToCloudinary } from "@/lib/Cloudinary";
@@ -8,9 +8,18 @@ import { uploadToCloudinary } from "@/lib/Cloudinary";
 export default function AnalyzePage() {
   const { user } = useAuth();
   const router = useRouter();
+
   const [symptom, setSymptom] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [authLoaded, setAuthLoaded] = useState(false);
+
+  // 🟢 Wait for auth to finish loading before showing form
+  useEffect(() => {
+    // Even if user is null, we mark auth as loaded to show UI
+    const timer = setTimeout(() => setAuthLoaded(true), 300);
+    return () => clearTimeout(timer);
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,11 +32,19 @@ export default function AnalyzePage() {
     try {
       setLoading(true);
 
-      // 1️⃣ Upload image to Cloudinary if available
-      let imageUrl = null;
+      // 1️⃣ Upload image to Cloudinary (if selected)
+      let imageUrl: string | null = null;
       if (image) {
-        imageUrl = await uploadToCloudinary(image);
-        console.log("Image uploaded to Cloudinary:", imageUrl);
+        try {
+          imageUrl = await uploadToCloudinary(image);
+          if (!imageUrl) throw new Error("Upload failed");
+          console.log("✅ Image uploaded:", imageUrl);
+        } catch (err) {
+          console.error("Cloudinary upload error:", err);
+          alert("Image upload failed. Please try again.");
+          setLoading(false);
+          return;
+        }
       }
 
       // 2️⃣ Get Firebase Auth token
@@ -46,39 +63,58 @@ export default function AnalyzePage() {
         }),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || "Failed to analyze crop issue");
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Invalid response format from server");
       }
 
-      console.log("Response:", data);
+      if (!res.ok) {
+        throw new Error(data?.detail || "Failed to analyze crop issue");
+      }
 
-      // 4️⃣ Redirect user to the result page with dynamic ID
+      console.log("✅ Backend response:", data);
+
+      // 4️⃣ Ensure resultId exists before redirect
+      if (!data.resultId) {
+        throw new Error("Result ID missing in response");
+      }
+
+      // 5️⃣ Redirect to result page
       router.push(`/result/${data.resultId}`);
 
     } catch (err: any) {
-      console.error("Error:", err);
+      console.error("❌ Error:", err);
       alert("Error: " + err.message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!authLoaded) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-green-700 text-xl font-semibold">
+        Checking authentication...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-100 to-green-200">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold mb-4 text-green-700 text-center">
-          AgriAid 🌾
+          🌾 AgriAid
         </h1>
         <p className="text-gray-500 text-center mb-6">
-          Upload a crop image or describe the issue below
+          Upload a crop image or describe your issue below
         </p>
 
         <form onSubmit={handleSubmit}>
           <input
             type="file"
             accept="image/*"
+            disabled={loading}
             onChange={(e) => setImage(e.target.files?.[0] || null)}
             className="w-full mb-3 border p-2 rounded"
           />
@@ -86,6 +122,7 @@ export default function AnalyzePage() {
           <textarea
             placeholder="Describe your crop symptoms..."
             value={symptom}
+            disabled={loading}
             onChange={(e) => setSymptom(e.target.value)}
             className="w-full border p-3 rounded mb-4 resize-none"
             rows={3}
@@ -94,7 +131,11 @@ export default function AnalyzePage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-green-600 text-white w-full py-3 rounded-xl hover:bg-green-700 disabled:opacity-50"
+            className={`w-full py-3 rounded-xl text-white font-medium transition ${
+              loading
+                ? "bg-green-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            }`}
           >
             {loading ? "Analyzing..." : "Analyze Crop"}
           </button>

@@ -2,86 +2,88 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { db } from "@/lib/firebaseClient";
-import { doc, getDoc } from "firebase/firestore";
-import Link from "next/link";
+import { useAuth } from "@/context/Authcontext";
 
 interface ResultData {
   disease: string;
   remedy: string;
-  actions?: string[];
-  healthScore?: number;
+  actions: string[];
+  healthScore: number;
 }
 
 export default function ResultPage() {
-  const params = useParams();
+  const { id } = useParams(); // URL param -> result ID
+  const { user } = useAuth();
   const [result, setResult] = useState<ResultData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchResult = async () => {
-      const resultRef = doc(db, "results", params.id as string);
-      const snapshot = await getDoc(resultRef);
+      if (!user) return;
+      try {
+        const token = await user.getIdToken();
 
-      if (snapshot.exists()) {
-        setResult(snapshot.data() as ResultData);
-      } else {
-        console.error("Result not found");
+        const res = await fetch(`http://127.0.0.1:8000/result/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.detail || "Failed to load result");
+        setResult(data);
+      } catch (err: any) {
+        console.error("Error fetching result:", err);
+        alert("Error: " + err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchResult();
-  }, [params.id]);
+  }, [id, user]);
 
-  if (loading) return <p className="p-6 text-center">Loading results...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen text-green-700 text-xl font-semibold">
+        Loading result...
+      </div>
+    );
 
   if (!result)
     return (
-      <div className="text-center p-6">
-        <p className="text-red-600">No result found for this ID.</p>
-        <Link href="/analyze" className="text-green-700 underline">
-          Go back
-        </Link>
+      <div className="flex justify-center items-center min-h-screen text-red-600 text-lg font-semibold">
+        Failed to load result 😔
       </div>
     );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-50 to-green-100">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-green-700 mb-4 text-center">
-          Diagnosis Result 🌱
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-100 to-green-200 p-6">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
+        <h1 className="text-3xl font-bold text-green-700 text-center mb-4">
+          🌾 Diagnosis Result
         </h1>
 
-        {result.healthScore && (
-  <div className="mt-4">
-    <p className="text-sm text-gray-500 mb-1">Health Score</p>
-    <div className="w-full bg-gray-200 rounded-full h-3">
-      <div
-        className="bg-green-600 h-3 rounded-full"
-        style={{ width: `${result.healthScore}%` }}
-      />
-    </div>
-  </div>
-)}
-
-        <div className="border-t border-gray-200 pt-4 space-y-4">
+        <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-700">Disease:</h2>
-            <p className="text-xl text-green-800 font-bold">
-              {result.disease || "Healthy"}
+            <h2 className="text-lg font-semibold text-gray-600">Disease:</h2>
+            <p className="text-xl font-bold text-red-600 mt-1">
+              {result.disease}
             </p>
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-gray-700">Remedy:</h2>
-            <p className="text-gray-700">{result.remedy}</p>
+            <h2 className="text-lg font-semibold text-gray-600">Remedy:</h2>
+            <p className="text-base text-gray-800 mt-1 whitespace-pre-line">
+              {result.remedy}
+            </p>
           </div>
 
-          {result.actions && (
+          {result.actions?.length > 0 && (
             <div>
-              <h2 className="text-lg font-semibold text-gray-700">Next Actions:</h2>
-              <ul className="list-disc list-inside text-gray-600">
+              <h2 className="text-lg font-semibold text-gray-600">Suggested Actions:</h2>
+              <ul className="list-disc ml-5 text-gray-800 mt-1">
                 {result.actions.map((a, i) => (
                   <li key={i}>{a}</li>
                 ))}
@@ -90,12 +92,12 @@ export default function ResultPage() {
           )}
 
           <div className="text-center mt-6">
-            <Link
-              href="/analyze"
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700"
-            >
-              Analyze Another Crop
-            </Link>
+            <p className="text-gray-700 font-semibold">
+              🌱 Health Score:{" "}
+              <span className="text-green-700 font-bold">
+                {result.healthScore}/100
+              </span>
+            </p>
           </div>
         </div>
       </div>

@@ -1,5 +1,12 @@
+// /lib/firebaseClient.ts
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  setPersistence, 
+  browserLocalPersistence 
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -9,15 +16,18 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
-import { getFirestore } from "firebase/firestore";
 
-
-
+// ✅ Prevent re-initialization during hot reload
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+// ✅ Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// 🔹 Make login persistent even after refresh
+// ✅ Google provider
+export const provider = new GoogleAuthProvider();
+
+// ✅ Make login persistent (stay logged in after refresh)
 setPersistence(auth, browserLocalPersistence);
 
 export default app;

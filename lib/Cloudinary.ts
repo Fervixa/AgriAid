@@ -1,17 +1,34 @@
-export async function uploadToCloudinary(file: File) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "unsigned"); // we'll create this preset next
+export async function uploadToCloudinary(file: File): Promise<string> {
+  try {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!;
 
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-    {
-      method: "POST",
-      body: formData,
+    if (!cloudName || !uploadPreset) {
+      throw new Error("Missing Cloudinary environment variables");
     }
-  );
 
-  if (!res.ok) throw new Error("Failed to upload image to Cloudinary");
-  const data = await res.json();
-  return data.secure_url; // this is your image URL
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Cloudinary error:", data);
+      throw new Error(data.error?.message || "Failed to upload image to Cloudinary");
+    }
+
+    return data.secure_url;
+  } catch (err: any) {
+    console.error("Cloudinary upload failed:", err);
+    throw new Error("Failed to upload image to Cloudinary");
+  }
 }
