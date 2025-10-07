@@ -6,7 +6,7 @@ import firebase from "firebase/compat/app";
 
 export default function TestPage() {
   const [symptom, setSymptom] = useState("");
-  const [result, setResult] = useState<Record<string, any> | null>(null);
+  const [result, setResult] = useState<Record<string, unknown> | null>(null);
   const [user, setUser] = useState<firebase.User | null>(null);
 
   useEffect(() => {
