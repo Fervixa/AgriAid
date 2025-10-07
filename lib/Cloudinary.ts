@@ -27,8 +27,9 @@ export async function uploadToCloudinary(file: File): Promise<string> {
     }
 
     return data.secure_url;
-  } catch (err: any) {
-    console.error("Cloudinary upload failed:", err);
-    throw new Error("Failed to upload image to Cloudinary");
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to upload image to Cloudinary";
+    console.error("Cloudinary upload failed:", errorMessage);
+    throw new Error(errorMessage);
   }
 }

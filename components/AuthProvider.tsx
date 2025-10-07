@@ -6,7 +6,6 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
 } from "firebase/auth";
 import { auth, provider } from "@/lib/firebaseClient";
 
@@ -43,9 +42,10 @@ export default function AuthPage() {
         alert("Login successful!");
       }
       router.push("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Authentication failed!";
       console.error(err);
-      alert(err.message || "Authentication failed!");
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
