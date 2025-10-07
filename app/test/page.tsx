@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
-import {auth} from "@/lib/firebaseClient"
+import { auth } from "@/lib/firebaseClient";
 import { onAuthStateChanged } from "firebase/auth";
+import firebase from "firebase/compat/app";
 
 export default function TestPage() {
   const [symptom, setSymptom] = useState("");
-  const [result, setResult] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
+  const [result, setResult] = useState<Record<string, any> | null>(null);
+  const [user, setUser] = useState<firebase.User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+      setUser(firebaseUser as firebase.User | null);
     });
     return () => unsubscribe();
   }, []);
@@ -27,7 +28,7 @@ export default function TestPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ symptomText: symptom }),
     });

@@ -63,9 +63,10 @@ export default function AnalyzePage() {
       // to avoid a refetch).
       router.push(`/result/${data.resultId}`);
 
-    } catch (err: any) {
-      console.error("❌ Error:", err);
-      alert("Error: " + err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
+      console.error("❌ Error:", errorMessage);
+      alert("Error: " + errorMessage);
     } finally {
       setLoading(false);
     }
