@@ -52,6 +52,8 @@ export default function AnalyzePage() {
         }),
       });
 
+      console.log("Sending to backend:", { symptom, imageUrl });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data?.detail || "Failed to analyze crop issue");
       console.log("✅ Backend response:", data);
