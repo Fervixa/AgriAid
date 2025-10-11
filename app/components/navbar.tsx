@@ -5,7 +5,8 @@ import Image from "next/image";
 import LoginButton from "./LoginButton";
 import { auth } from "@/lib/firebaseClient";
 import { onAuthStateChanged } from "firebase/auth";
-import { Menu, X } from "lucide-react"; // icons for mobile toggle
+import { Menu, X } from "lucide-react";
+import { Analyzecrop } from "./analyzecrop";
 
 export const Navbar = () => {
   const [user, setUser] = useState<any>(null);
@@ -26,19 +27,25 @@ export const Navbar = () => {
       <div className="hidden md:flex gap-18 text-white font-medium">
         <a
           href="#home"
-          className="hover:text-green-400 transition hover:underline underline-offset-4"
+          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           Home
         </a>
         <a
           href="#about"
-          className="hover:text-green-400 transition hover:underline underline-offset-4"
+          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           About
         </a>
         <a
+          href="#ourGoal"
+          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
+        >
+          Our-Goal
+        </a>
+        <a
           href="#contact"
-          className="hover:text-green-400 transition hover:underline underline-offset-4"
+          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           Contact
         </a>
@@ -62,9 +69,9 @@ export const Navbar = () => {
             </span>
           </>
         )}
+        <Analyzecrop />
         <LoginButton />
       </div>
-
       {/* 🔹 Mobile Menu Button */}
       <button
         className="md:hidden text-white"
@@ -116,6 +123,7 @@ export const Navbar = () => {
             </div>
           )}
           <LoginButton />
+          <Analyzecrop />
         </div>
       )}
     </nav>

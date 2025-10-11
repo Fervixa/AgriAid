@@ -59,8 +59,7 @@ export default function AnalyzePage() {
       console.log("✅ Backend response:", data);
 
       // ✅ Redirect to result page by id. The result page should fetch the
-      // result using the resultId (or use shared state / storage if you prefer
-      // to avoid a refetch).
+      // data again by id to ensure fresh data.
       router.push(`/result/${data.resultId}`);
 
     } catch (err: unknown) {
