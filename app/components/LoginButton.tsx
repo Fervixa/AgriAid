@@ -30,14 +30,14 @@ export default function LoginButton() {
       {user ? (
         <button
           onClick={handleLogout}
-          className="text-sm cursor-pointer text-white bg-red-600 hover:bg-red-700 px-4 py-2  rounded-lg transition"
+          className="text-sm cursor-pointer text-black  bg-red-600 hover:bg-red-700 px-4 py-2  rounded-lg transition"
         >
           Logout
         </button>
       ) : (
         <button
           onClick={handleLogin}
-          className="text-mdeium cursor-pointer text-white bg-green-600 hover:bg-green-700 px-4 py-2  rounded-lg transition"
+          className="text-medium w-[100px] hover:-translate-y-2 duration-150 hover:cursor-pointer text-black bg-green-600 hover:bg-green-700 px-4 py-2  rounded-lg transition"
         >
           Login
         </button>

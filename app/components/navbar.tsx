@@ -21,31 +21,31 @@ export const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-gray-700/30 backdrop-blur-md px-6 py-4 flex justify-between items-center rounded-3xl">
       {/* 🔹 Logo */}
-      <div className="text-2xl font-bold text-green-500">AgriAid</div>
+      <div className="text-2xl font-bold text-green-600">AgriAid</div>
 
       {/* 🔹 Desktop Nav Links */}
-      <div className="hidden md:flex gap-18 text-white font-medium">
+      <div className="hidden md:flex gap-18 text-white font-medium ">
         <a
           href="#home"
-          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
+          className="hover:text-green-700 hover:-translate-y-1 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           Home
         </a>
         <a
           href="#about"
-          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
+          className="hover:text-green-700 hover:-translate-y-1 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           About
         </a>
         <a
           href="#ourGoal"
-          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
+          className="hover:text-green-600 hover:-translate-y-1 transition hover:underline hover:cursor-pointer underline-offset-4"
         >
-          Our-Goal
+          Our-Goals
         </a>
         <a
           href="#contact"
-          className="hover:text-green-400 transition hover:underline hover:cursor-pointer underline-offset-4"
+          className="hover:text-green-600 hover:-translate-y-1transition hover:underline hover:cursor-pointer underline-offset-4"
         >
           Contact
         </a>
@@ -69,8 +69,7 @@ export const Navbar = () => {
             </span>
           </>
         )}
-        <Analyzecrop />
-        <LoginButton />
+
       </div>
       {/* 🔹 Mobile Menu Button */}
       <button
@@ -82,7 +81,7 @@ export const Navbar = () => {
 
       {/* 🔹 Mobile Dropdown Menu */}
       {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-gray-800/90 backdrop-blur-md flex flex-col items-center gap-4 py-5 text-white font-medium rounded-b-2xl shadow-lg md:hidden">
+        <div className="absolute top-16  w-full bg-gray-800/90 backdrop-blur-md flex flex-col items-center gap-4 py-5 text-white font-medium rounded-b-2xl shadow-lg md:hidden">
           <a
             href="#home"
             className="hover:text-green-400 transition"

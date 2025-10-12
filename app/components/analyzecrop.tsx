@@ -12,9 +12,9 @@ export const Analyzecrop = () => {
   return (
     <button
       onClick={handleClick}
-      className="mr-10 text-medium cursor-pointer text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition"
+      className='border-2 hover:bg-green-800/20 hover:-translate-y-2 duration-150 hover:cursor-pointer h-[50px] w-[130px] rounded-2xl'
     >
-      Analyze Crop +
+      Analyze Crop
     </button>
   );
 };
