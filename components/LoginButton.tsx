@@ -3,6 +3,7 @@
 import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { auth, provider } from "@/lib/firebaseClient";
+import Router from "next/router";
 
 export default function LoginButton() {
   const [user, setUser] = useState<any>(null);
@@ -11,15 +12,6 @@ export default function LoginButton() {
     const unsub = onAuthStateChanged(auth, (user) => setUser(user));
     return () => unsub();
   }, []);
-
-  const handleLogin = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      console.error("Login failed:", err);
-      alert("Login failed!");
-    }
-  };
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -30,15 +22,19 @@ export default function LoginButton() {
       {user ? (
         <button
           onClick={handleLogout}
-          className="text-sm cursor-pointer text-black  bg-red-600 hover:bg-red-700 px-4 py-2  rounded-lg transition"
+          className="text-sm cursor-pointer text-black  bg-red-600/45 hover:bg-red-700 px-4 py-2  rounded-lg transition"
         >
           Logout
         </button>
       ) : (
         <button
-          onClick={handleLogin}
+          onClick={()=>{Router.push("/login")}}
           className="text-medium w-[100px] hover:-translate-y-2 duration-150 hover:cursor-pointer text-black bg-green-600 hover:bg-green-700 px-4 py-2  rounded-lg transition"
         >
+          {user == null && 
+                        <span className='text-xs text-zinc-800'>Please Login to Continue</span>
+                      }
+          
           Login
         </button>
       )}

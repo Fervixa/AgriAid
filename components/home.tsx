@@ -1,8 +1,9 @@
 "use client"
 import React from 'react'
 import { motion } from 'framer-motion';
-import { Analyzecrop } from './analyzecrop';
 import LoginButton from './LoginButton';
+import { Button } from '@/components/ui/button';
+import Router from 'next/router';
 
 
 export const Home = () => {
@@ -21,10 +22,10 @@ export const Home = () => {
             <span className="block text-lg sm:text-xl md:text-2xl text-green-600 ">
               Smart Farming, Smart Future 🌾
             </span>
-
-          </h1 >
+            
+            </h1 >
           <div className='gap-5 mt-5 flex'>
-            <Analyzecrop />
+           <Button onClick={() =>Router.push('/home')} className="bg-green-600 text-white px-4 py-2 rounded-lg">Analyze</Button>
             <LoginButton />
             <motion.div />
           </div>
