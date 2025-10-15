@@ -1,14 +1,15 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LoginButton from "./LoginButton";
 import { auth } from "@/lib/firebaseClient";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, type User } from "firebase/auth";
 import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
-  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -16,45 +17,57 @@ export const Navbar = () => {
     return () => unsub();
   }, []);
 
+  const navItems = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Our Goals", href: "/goals" },
+    { label: "Contact", href: "/contact" },
+  ];
+
+  const handleNavigate = (href: string) => {
+    setMenuOpen(false);
+    router.push(href);
+  };
+
   return (
     <nav
-      className="fixed top-3 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] 
-                 z-50 bg-black/10 backdrop-blur-lg border border-white/20 
-                 rounded-2xl px-6 py-3 flex justify-between items-center 
-                 shadow-lg transition-all duration-300"
+      className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] z-50
+                 bg-black/10 backdrop-blur-lg border border-white/10 rounded-2xl
+                 px-4 py-3 flex items-center justify-between shadow-lg"
+      aria-label="Primary"
     >
-      {/* 🔹 Logo */}
-      <div className=" -mb-7">
-        <Image
-          src="/logo/04.jpg" // Optional: add your logo
-          alt="AgriAid"
-          width={80}
-          height={80}
-          className="rounded-lg"
-        />
+      {/* Logo + title */}
+      <div
+        className="flex items-center gap-3 cursor-pointer"
+        onClick={() => router.push("/")}
+        role="button"
+        aria-label="Go to home"
+      >
+        <div className="w-10 h-10 relative rounded-lg overflow-hidden flex-shrink-0">
+          <Image src="/logo/05.jpg" alt="AgriAid" fill sizes="40px" className="object-cover" />
+        </div>
+        <div className="hidden sm:flex flex-col leading-tight">
+          <span className="text-sm font-bold text-white">AgriAid</span>
+          <span className="text-xs text-green-200 -mt-0.5">AI crop doctor</span>
+        </div>
       </div>
 
-      {/* 🔹 Desktop Nav Links */}
-      <div className="hidden md:flex gap-10 text-white font-medium items-center">
-        {["Home", "About", "Our Goals", "Contact"].map((item, idx) => (
-          <a
-            key={idx}
-            href={`#${item.replace(/\s+/g, "").toLowerCase()}`}
-            className="relative group"
+      {/* Desktop nav */}
+      <div className="hidden md:flex gap-8 items-center">
+        {navItems.map((item) => (
+          <button
+            key={item.href}
+            onClick={() => handleNavigate(item.href)}
+            className="text-sm text-gray-100 hover:text-green-300 transition px-2 py-1 rounded-md"
+            aria-label={`Go to ${item.label}`}
           >
-            <span className="transition text-gray-100 group-hover:text-green-400">
-              {item}
-            </span>
-            <span
-              className="absolute left-0 -bottom-1 w-0 h-[2px] bg-green-400 transition-all 
-                         group-hover:w-full rounded-full"
-            ></span>
-          </a>
+            {item.label}
+          </button>
         ))}
       </div>
 
-      {/* 🔹 Right Side (User + Login) */}
-      <div className="hidden md:flex items-center gap-5">
+      {/* Right side */}
+      <div className="hidden md:flex items-center gap-4">
         {user && (
           <div className="flex items-center gap-3">
             {user.photoURL && (
@@ -74,50 +87,41 @@ export const Navbar = () => {
         <LoginButton />
       </div>
 
-      {/* 🔹 Mobile Menu Button */}
+      {/* Mobile menu toggle */}
       <button
-        className="md:hidden text-white focus:outline-none"
-        onClick={() => setMenuOpen(!menuOpen)}
+        className="md:hidden text-white p-2 rounded-md focus:ring-2 focus:ring-green-300"
+        onClick={() => setMenuOpen((s) => !s)}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
       >
-        {menuOpen ? <X size={28} /> : <Menu size={28} />}
+        {menuOpen ? <X size={22} /> : <Menu size={22} />}
       </button>
 
-      {/* 🔹 Mobile Dropdown Menu */}
+      {/* Mobile dropdown */}
       <div
-        className={`absolute top-[70px] left-0 w-full bg-gray-900/90 backdrop-blur-xl 
-                    flex flex-col items-center gap-5 py-6 text-white font-medium 
-                    rounded-b-2xl shadow-lg transform transition-all duration-500 
-                    ${menuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5 pointer-events-none"}`}
+        className={`fixed inset-x-3 top-20 z-40 bg-gray-900/95 backdrop-blur-xl rounded-2xl
+                    p-6 flex flex-col gap-4 transition-transform duration-200
+                    ${menuOpen ? "translate-y-0 opacity-100" : "translate-y-[-8%] opacity-0 pointer-events-none"}`}
       >
-        {["Home", "About", "Our Goals", "Contact"].map((item, idx) => (
-          <a
-            key={idx}
-            href={`#${item.replace(/\s+/g, "").toLowerCase()}`}
-            className="hover:text-green-400 transition"
-            onClick={() => setMenuOpen(false)}
+        {navItems.map((item) => (
+          <button
+            key={item.href}
+            onClick={() => handleNavigate(item.href)}
+            className="text-left text-lg text-gray-100 hover:text-green-300 px-2 py-2 rounded-md"
           >
-            {item}
-          </a>
+            {item.label}
+          </button>
         ))}
 
-        {user && (
-          <div className="flex flex-col items-center gap-2">
-            {user.photoURL && (
-              <Image
-                src={user.photoURL}
-                alt="User"
-                width={40}
-                height={40}
-                className="rounded-full border border-green-400 shadow-sm"
-              />
-            )}
-            <span className="text-sm font-semibold text-gray-300">
-              {user.displayName || "User"}
-            </span>
+        <div className="border-t border-white/10 mt-2 pt-3 flex items-center gap-3">
+          {user && user.photoURL && (
+            <Image src={user.photoURL} alt="User" width={40} height={40} className="rounded-full" />
+          )}
+          <div className="flex-1">
+            <div className="text-sm text-gray-100">{user?.displayName || "Guest"}</div>
           </div>
-        )}
-        <LoginButton />
-       </div>
+          <LoginButton />
+        </div>
+      </div>
     </nav>
   );
 };

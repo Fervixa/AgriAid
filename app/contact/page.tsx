@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-export const Contact = () => {
+const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -45,8 +45,8 @@ export const Contact = () => {
   };
 
   return (
-    <section className="w-full py-12 bg-gradient-to-b from-green-50 to-green-100">
-      <div className="max-w-3xl mx-auto px-6">
+    <section className="w-full  py-12 bg-gradient-to-b from-green-50 to-green-100">
+      <div className="mt-36 max-w-3xl mx-auto px-6">
         <motion.div
           initial={{ y: 24, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -132,3 +132,6 @@ export const Contact = () => {
     </section>
   );
 };
+
+
+export default Contact

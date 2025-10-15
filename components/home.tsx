@@ -16,7 +16,8 @@ export const Home = () => {
         viewport={{ once: true }}
         className="w-full h-full flex items-center justify-center"
       >
-        <div className="relative mt-36 max-w-4xl w-full mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-2xl p-10 flex flex-col items-center text-center">
+        <div className="relative mt-36
+         max-w-4xl w-full mx-4 rounded-2xl bg-white/80 backdrop-blur-md shadow-2xl p-10 flex flex-col items-center text-center">
           <h1 className="text-green-700 text-5xl sm:text-4xl md:text-6xl font-serif font-extrabold drop-shadow-md leading-tight">
             AgriAid
             <span className="block text-base sm:text-lg md:text-xl text-green-600 mt-2 font-medium">
