@@ -3,8 +3,7 @@ import React from 'react'
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-
-export const About = () => {
+const About = () => {
   return (
 
     <div id="about" className='bg-green-600 z-10 shadow-2xl opacity-80'>
@@ -63,3 +62,4 @@ export const About = () => {
     </div>
   )
 }
+export default About
