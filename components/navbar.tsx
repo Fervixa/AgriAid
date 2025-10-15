@@ -19,22 +19,19 @@ export const Navbar = () => {
   return (
     <nav
       className="fixed top-3 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] 
-                 z-50 bg-white/10 backdrop-blur-lg border border-white/20 
+                 z-50 bg-black/10 backdrop-blur-lg border border-white/20 
                  rounded-2xl px-6 py-3 flex justify-between items-center 
                  shadow-lg transition-all duration-300"
     >
       {/* 🔹 Logo */}
-      <div className="flex items-center gap-2">
+      <div className=" -mb-7">
         <Image
-          src="/logo.png" // Optional: add your logo
+          src="/logo/04.jpg" // Optional: add your logo
           alt="AgriAid"
-          width={36}
-          height={36}
+          width={80}
+          height={80}
           className="rounded-lg"
         />
-        <span className="text-2xl font-bold text-green-400 tracking-wide drop-shadow-sm">
-          AgriAid
-        </span>
       </div>
 
       {/* 🔹 Desktop Nav Links */}

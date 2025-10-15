@@ -17,7 +17,7 @@ export default function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-green-700 text-xl font-semibold">
+      <div className=" mt-36 flex justify-center items-center min-h-screen text-green-700 text-xl font-semibold">
         Loading Dashboard...
       </div>
     );
@@ -35,7 +35,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-8">
+    <div className="mt-36  min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-8">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg text-center">
         <h1 className="text-3xl font-bold text-green-700 mb-4">
           🌿 Welcome to Your Dashboard
