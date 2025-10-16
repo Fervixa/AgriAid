@@ -35,8 +35,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="mt-36  min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-8">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg text-center">
+    <div className="  min-h-screen bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-8">
+      <div className="mt-36 bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg text-center">
         <h1 className="text-3xl font-bold text-green-700 mb-4">
           🌿 Welcome to Your Dashboard
         </h1>

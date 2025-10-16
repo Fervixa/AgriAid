@@ -28,6 +28,24 @@ export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 
 // ✅ Make login persistent (stay logged in after refresh)
-setPersistence(auth, browserLocalPersistence);
+// Only call browser-specific APIs when running in the browser.
+if (typeof window !== "undefined") {
+  // setPersistence returns a promise but we intentionally don't await it here
+  // to avoid changing module evaluation ordering. Any errors will be logged.
+  setPersistence(auth, browserLocalPersistence).catch((err) => {
+    // Log persistence errors in development so they don't fail the build.
+    // In production you may want to handle this differently.
+    // eslint-disable-next-line no-console
+    console.warn("Could not set Firebase auth persistence:", err);
+  });
+}
+
+// Helper to create a Google provider instance (keeps the client import stable)
+export function createGoogleProvider() {
+  const p = new GoogleAuthProvider();
+  // prompt to select account by default
+  p.setCustomParameters({ prompt: "select_account" });
+  return p;
+}
 
 export default app;

@@ -24,6 +24,10 @@ export default function LoginButton() {
           onClick={handleLogout}
           className="text-sm cursor-pointer text-black  bg-red-600/45 hover:bg-red-700 px-4 py-2  rounded-lg transition"
         >
+          {user == null && 
+                        <span className='text-xs text-zinc-800'>Please Login to Continue</span>
+                      }
+          ^
           Logout
         </button>
       ) : (
@@ -31,10 +35,6 @@ export default function LoginButton() {
           onClick={()=>{Router.push("/login")}}
           className="text-medium w-[100px] hover:-translate-y-2 duration-150 hover:cursor-pointer text-black bg-green-600 hover:bg-green-700 px-4 py-2  rounded-lg transition"
         >
-          {user == null && 
-                        <span className='text-xs text-zinc-800'>Please Login to Continue</span>
-                      }
-          
           Login
         </button>
       )}
