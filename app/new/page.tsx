@@ -109,7 +109,7 @@ export default function AnalyzePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+    <div className="min pt-36 min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <div className="bg-white shadow-xl rounded-3xl p-8 w-full max-w-2xl">
         <h1 className="text-4xl font-bold mb-2 text-green-700 text-center">🌾 AgriAid</h1>
         <p className="text-gray-500 text-center mb-8">
