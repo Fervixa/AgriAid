@@ -17,7 +17,7 @@ export const Navbar = () => {
   }, []);
 
   const navItems = [
-    { label: "Home", href: "/" },
+    { label: "Home", href: "/dashboard" },
     { label: "About", href: "/about" },
     { label: "Our Goals", href: "/goals" },
     { label: "Contact", href: "/contact" },
