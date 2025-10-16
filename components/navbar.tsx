@@ -47,7 +47,7 @@ export const Navbar = () => {
           <button
             key={item.href}
             onClick={() => handleNavigate(item.href)}
-            className="text-gray-700 hover:text-green-600 font-medium px-3 py-2 rounded-lg transition-colors"
+            className="text-gray-700 hover:text-green-600 hover:scale-110 cursor-pointer font-medium px-3 py-2 rounded-lg  duration-300 hover:bg-gray-400/10"
           >
             {item.label}
           </button>
