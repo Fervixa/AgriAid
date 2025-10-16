@@ -156,7 +156,7 @@ export default function ResultPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-md mx-4">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Result Not Found</h2>
-          <p className="text-gray-600">We couldn't find the diagnosis you're looking for.</p>
+          <p className="text-gray-600">We could not find the diagnosis you are looking for.</p>
         </div>
       </div>
     );
@@ -167,7 +167,7 @@ export default function ResultPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">🌿 Diagnosis Results</h1>
-          <p className="text-gray-600 text-lg">Complete analysis of your plant's condition</p>
+          <p className="text-gray-600 text-lg">Complete analysis of your plant condition</p>
         </div>
 
         {/* Health Score Card - Full Width */}
