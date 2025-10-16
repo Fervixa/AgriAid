@@ -1,12 +1,24 @@
 "use client"
 import React from 'react'
+import {auth} from "@/lib/firebaseClient"
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import LoginButton from '@/components/LoginButton';
 import { Button } from '@/components/ui/button';
 export const Home = () => {
   const router = useRouter();
-  
+   const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => setUser(user));
+    return () => unsub();
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
   return (
     <div id="home" className="relative text-black bg-gradient-to-b from-green-50 via-green-100 to-green-200 min-h-screen overflow-hidden">
       <motion.div
@@ -28,17 +40,38 @@ export const Home = () => {
           <p className="mt-4 text-gray-600 max-w-2xl">
             Snap a photo or describe the symptom and get instant guidance to keep your crops healthy.
           </p>
+          
+        {user == null && 
+                      <span className='text-xs text-zinc-800'>Please Login to Continue</span>
+                    }
+       
 
-          <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center">
-            <Button
-              onClick={() => router.push('/dashboard')}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition"
-            >
-              Analyze
-            </Button>
+        <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center">
+          <Button
+            onClick={() => router.push('/dashboard')}
+            className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition"
+          >
+            Analyze
+          </Button>
 
-            <LoginButton />
-          </div>
+    {user ? (
+      <Button
+      variant={'destructive'}
+        onClick={handleLogout}
+        className="px-3 py-4"
+      > 
+        Logout
+      </Button>
+    ) : (
+      <Button
+        onClick={()=>{router.push("/login")}}
+        
+        className=""
+      >
+        Login
+      </Button>
+    )}
+        </div>
 
           <div className="mt-6 text-sm text-gray-500">
             <span>Trusted recommendations · Private by design</span>
