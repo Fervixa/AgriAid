@@ -21,18 +21,18 @@ export const metadata: Metadata = {
     "plant health AI",
     "crop health scoring",
   ],
-  authors: [{ name: "AgriAid Team", url: "https://agriaid.vercel.app" }],
+  authors: [{ name: "AgriAid Team", url: "https://agriaid.xyz" }],
   creator: "AgriAid",
-  metadataBase: new URL("https://agriaid.vercel.app"),
+  metadataBase: new URL("https://agriaid.xyz"),
   openGraph: {
     title: "AgriAid | AI Crop Health Scoring & Plant Disease Detection 🌾",
     description:
       "Analyze your plants’ health with AgriAid — the AI-powered crop doctor that detects diseases and offers smart remedies instantly.",
-    url: "https://agriaid.vercel.app",
+    url: "https://agriaid.xyz",
     siteName: "AgriAid",
     images: [
       {
-        url: "https://agriaid.vercel.app/og-image.png",
+        url: "https://agriaid.xyz/og-image.png",
         width: 1200,
         height: 630,
         alt: "AgriAid - AI Crop Health App",
@@ -46,11 +46,11 @@ export const metadata: Metadata = {
     title: "AgriAid 🌾 | AI Crop Health Scoring App",
     description:
       "Check your crop's health using AgriAid — the AI-powered crop doctor that detects diseases and provides remedies.",
-    images: ["https://agriaid.vercel.app/og-image.png"],
+    images: ["https://agriaid.xyz/og-image.png"],
     creator: "@AgriAid",
   },
   alternates: {
-    canonical: "https://agriaid.vercel.app",
+    canonical: "https://agriaid.xyz",
   },
   category: "Agriculture AI",
   viewport: {

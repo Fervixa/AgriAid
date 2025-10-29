@@ -1,5 +1,5 @@
 "use client";
-
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/Authcontext";
@@ -10,7 +10,7 @@ export default function AnalyzePage() {
   const router = useRouter();
 
   const [symptom, setSymptom] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imageUploaded, setImageUploaded] = useState(false);
@@ -257,25 +257,65 @@ export default function AnalyzePage() {
             )}
           </button>
         </form>
+{/* Analysis Animation */}
+{analyzing && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.4 }}
+    className="mt-6 p-6 bg-green-50 rounded-xl border border-green-200 shadow-inner"
+  >
+    <div className="flex flex-col items-center justify-center space-y-6">
 
-        {/* Analysis Animation */}
-        {analyzing && (
-          <div className="mt-6 p-4 bg-green-50 rounded-xl">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <p className="text-sm font-medium text-green-700">Processing image...</p>
-            </div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse delay-200"></div>
-              <p className="text-sm font-medium text-green-700">Detecting diseases...</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse delay-400"></div>
-              <p className="text-sm font-medium text-green-700">Generating recommendations...</p>
-            </div>
-          </div>
-        )}
+      {/* Spinner Animation */}
+      <motion.div
+        className="relative flex items-center justify-center"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+      >
+        <div className="w-14 h-14 rounded-full border-4 border-green-200 border-t-green-500"></div>
+        <motion.div
+          className="absolute w-8 h-8 rounded-full border-2 border-green-400"
+          animate={{
+            scale: [1, 1.4, 1],
+            opacity: [1, 0.4, 1],
+          }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        />
+      </motion.div>
+
+      {/* Loading Text */}
+      <div className="text-center space-y-2">
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-green-700 text-sm font-semibold"
+        >
+          🔍 Processing image...
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="text-green-700 text-sm font-semibold"
+        >
+          🌿 Detecting diseases...
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="text-green-700 text-sm font-semibold"
+        >
+          💡 Generating recommendations...
+        </motion.p>
       </div>
     </div>
-  );
-}
+  </motion.div>)}
+        </div>
+      </div>
+    
+)}
