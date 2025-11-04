@@ -83,7 +83,7 @@ function HealthGauge({ score }: { score: number }) {
 
   // Determine health status segment
   const getStatus = () => {
-    for (let h of healthStatus) if (animatedScore >= h.min) return h;
+    for (const h of healthStatus) if (animatedScore >= h.min) return h;
     return healthStatus[3];
   };
   const status = getStatus();
