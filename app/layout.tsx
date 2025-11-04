@@ -2,7 +2,6 @@ import "./globals.css";
 import { AuthProvider } from "@/context/Authcontext";
 import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
-import { Head } from "next/document";
 export const metadata: Metadata = {
   title: {
     default: "AgriAid | AI Crop Health Scoring & Plant Disease Detection 🌾",
@@ -66,7 +65,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         {/* Schema.org JSON-LD for rich results */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4441398034363789"
      crossOrigin="anonymous"></script>
@@ -89,7 +88,7 @@ export default function RootLayout({
             }),
           }}
         />
-      </Head>
+      </head>
       <body className="bg-white text-gray-900 antialiased">
         <AuthProvider>
           <Navbar />
